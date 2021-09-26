@@ -22,6 +22,9 @@ In the paper [Randomly Wired Neural Network](https://arxiv.org/abs/1904.01569), 
 
 As the datasets are ordered by magnitude, they will be trained sequentially and if the classification accuracy reaches a threshhold then I will move on the next largest dataset.
 
+### Objective
+The objective of this project is for me to gain better understanding of the NAS in general and in the state-of-the-art techniques of NAS. As the project progresss, I plan to adapt the Randomly Wired Neural Network model to object detection as well. 
+
 ### Tasks
 - [ ] Base NN architecture from which the Network Generator will build the model
 - [ ] Graph algorithm for the Network Generator
