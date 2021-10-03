@@ -16,7 +16,7 @@ NAS, Neural Architecture Search, is essentilly an algorithm that allows auomatic
 In the paper [Randomly Wired Neural Network](https://arxiv.org/abs/1904.01569), it is proposed that NAS is meant for the architecture to be built freely with lack of human bias. However, existing NAS methods have limited the search methods and this paper attempts to let the architecture be build more freely using graph algorithms.
 
 ##### Datasets (ordered by magnitude) 
-- [MNIST](http://yann.lecun.com/exdb/mnist/)
+- [PatchCamelyon] (https://patchcamelyon.grand-challenge.org)
 - [VOC 2012](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/)
 - [ImageNET](https://www.image-net.org)
 
@@ -26,7 +26,7 @@ As the datasets are ordered by magnitude, they will be trained sequentially and 
 The objective of this project is for me to gain better understanding of the NAS in general and in the state-of-the-art techniques of NAS. As the project progresss, I plan to adapt the Randomly Wired Neural Network model to object detection as well. 
 
 ### Tasks
-- [ ] Base NN architecture from which the Network Generator will build the model
+- [x] Base NN architecture from which the Network Generator will build the model
 - [ ] Graph algorithm for the Network Generator
   - [ ] Erdo ̋s-Re ́nyi (ER)
   - [ ] Baraba ́si-Albert (BA)
