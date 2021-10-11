@@ -16,7 +16,7 @@ NAS, Neural Architecture Search, is essentilly an algorithm that allows auomatic
 In the paper [Randomly Wired Neural Network](https://arxiv.org/abs/1904.01569), it is proposed that NAS is meant for the architecture to be built freely with lack of human bias. However, existing NAS methods have limited the search methods and this paper attempts to let the architecture be build more freely using graph algorithms.
 
 ##### Datasets (ordered by magnitude) 
-- [PatchCamelyon] (https://patchcamelyon.grand-challenge.org)
+- [PatchCamelyon](https://patchcamelyon.grand-challenge.org)
 - [VOC 2012](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/)
 - [ImageNET](https://www.image-net.org)
 
