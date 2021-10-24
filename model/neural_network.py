@@ -3,7 +3,7 @@ from netowrk_generator import Rand_Wire
 
 
 class RandomlyWiredNeuralNetwork(nn.Module):
-    def __init__(self, channel, input_channel, graph_type, classes, node_num, is_small_regime=True):
+    def __init__(self, channel, input_channel, p, graph_type, classes, node_num, is_train=True, is_small_regime=True,):
         self.channel = channel
         self.classes = classes
         self.input_channel = input_channel
@@ -20,11 +20,11 @@ class RandomlyWiredNeuralNetwork(nn.Module):
                 nn.BatchNorm2d(channel)
             )
 
-            self.conv3 = Rand_Wire(graph_type, node_num, channel)
+            self.conv3 = Rand_Wire(node_num, p, channel, channel, graph_type, is_train, 'small_regime')
 
-            self.conv4 = Rand_Wire(graph_type, node_num, 2*channel)
+            self.conv4 = Rand_Wire(node_num, p, channel, 2*channel, graph_type, is_train, "small_regime")
             
-            self.conv5 = Rand_Wire(graph_type, node_num, 4*channel)
+            self.conv5 = Rand_Wire(node_num, p, 2*channel, 4*channel, graph_type, is_train, "small_regime")
 
             self.class_conv = nn.Sequential(
                 nn.ReLU(),
@@ -32,13 +32,13 @@ class RandomlyWiredNeuralNetwork(nn.Module):
                 nn.BatchNorm2d()
             )
         else:
-            self.conv2 = Rand_Wire(graph_type, node_num//2, channel)
+            self.conv2 = Rand_Wire(node_num, p, channel//2, channel, graph_type, is_train, "regular_regime")
 
-            self.conv3 = Rand_Wire(graph_type, node_num, 2*channel)
-            
-            self.conv4 = Rand_Wire(graph_type, node_num, 4*channel)
+            self.conv3 = Rand_Wire(node_num, p, channel, 2*channel, graph_type, is_train, "regular_regime")
 
-            self.conv5 = Rand_Wire(graph_type, node_num, 8*channel)
+            self.conv4 = Rand_Wire(node_num, p, 2*channel, 4*channel, graph_type, is_train, "regular_regime")
+
+            self.conv5 = Rand_Wire(node_num, p, 4*channel, 8*channel, graph_type, is_train, "regular_regime")
 
             self.class_conv = nn.Sequential(
                 nn.ReLU(),
