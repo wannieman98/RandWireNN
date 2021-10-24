@@ -13,11 +13,11 @@ class Graph(nn.Module):
 
     def make_graph(self):
         seed = 981126
-        if self.graph_mode is "ER":
+        if self.graph_mode == "ER":
             graph = nx.random_graphs.erdos_renyi_graph(self.node_num, self.p, seed=seed)
-        elif self.graph_mode is "WS":
+        elif self.graph_mode == "WS":
             graph = nx.random_graphs.connected_watts_strogatz_graph(self.node_num, self.k, self.p, seed=seed)
-        elif self.graph_mode is "BA":
+        elif self.graph_mode == "BA":
             graph = nx.random_graphs.barabasi_albert_graph(self.node_num, self.m, seed=seed)
 
         return graph
