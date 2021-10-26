@@ -32,7 +32,7 @@ The objective of this project is for me to gain better understanding of the NAS 
   - [ ] Baraba ́si-Albert (BA)
   - [ ] Watts-Strogatz (WS)
 - [ ] Network Generator
-- [ ] Dataset pipelines
+- [x] Dataset pipelines
 - [ ] Training Functions
 - [ ] Testing Functions
 - [ ] Script to train the model
