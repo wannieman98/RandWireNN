@@ -1,6 +1,8 @@
 import torch.nn as nn
 import networkx as nx
 
+SEED = 981126
+
 class Graph(nn.Module):
 
     def __init__(self, node_num, p, k=4, m=5, graph_mode="WS"):
