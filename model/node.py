@@ -4,7 +4,7 @@ import torch.nn as nn
 class Node(nn.Module):
     def __init__(self, in_channel, out_channel, degree, stride=1):
         super(Node, self).__init__()
-        self.aggregate_weight = torch.zeros(degree, requires_grad=True)
+        self.aggregate_weight = torch.randn(degree, requires_grad=True)
         self.conv = nn.Sequential(
             nn.ReLU(),
             SeperableConvolution(in_channel, out_channel, stride),
@@ -47,9 +47,3 @@ class SeperableConvolution(nn.Module):
         """
         # x = [B, C, W, H]
         return self.conv(x)
-
-# if __name__ == "__main__":
-#     node = Node(3, 4, 3)
-#     tensor = torch.randn((32, 3, 96, 96, 3), dtype=torch.float)
-
-#     print(node(tensor).shape)
