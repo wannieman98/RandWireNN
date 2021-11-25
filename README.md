@@ -27,13 +27,13 @@ The objective of this project is for me to gain better understanding of the NAS 
 
 ### Tasks
 - [x] Base NN architecture from which the Network Generator will build the model
-- [ ] Graph algorithm for the Network Generator
-  - [ ] Erdo ̋s-Re ́nyi (ER)
-  - [ ] Baraba ́si-Albert (BA)
-  - [ ] Watts-Strogatz (WS)
-- [ ] Network Generator
-- [ ] Dataset pipelines
-- [ ] Training Functions
+- [x] Graph algorithm for the Network Generator
+  - [x] Erdo ̋s-Re ́nyi (ER)
+  - [x] Baraba ́si-Albert (BA)
+  - [x] Watts-Strogatz (WS)
+- [ ] Network Generator (On-Going)
+- [x] Dataset pipelines
+- [x] Training Functions
 - [ ] Testing Functions
 - [ ] Script to train the model
 
@@ -42,6 +42,7 @@ The objective of this project is for me to gain better understanding of the NAS 
     ```
     torch >= 1.9.0
     torchvision >= 0.10.1
+    networkx >= 2.6.3
     ```
 
 

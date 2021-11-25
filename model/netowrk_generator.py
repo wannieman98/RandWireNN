@@ -3,6 +3,7 @@ from node import Node
 import torch.nn as nn
 from graph import Graph
 
+
 class Rand_Wire(nn.Module):
     def __init__(self, node_num, p, in_channels, out_channels, graph_mode, is_train, name):
         super(Rand_Wire, self).__init__()
@@ -16,7 +17,7 @@ class Rand_Wire(nn.Module):
 
         # get graph nodes and in edges
         graph_node = Graph(self.node_num, self.p, graph_mode=graph_mode)
-        
+
         # if self.is_train is True:
         #     print("is_train: True")
         #     graph = graph_node.make_graph()
@@ -41,8 +42,8 @@ class Rand_Wire(nn.Module):
         for node in range(1, len(self.nodes) - 1):
             if len(self.in_edges[node]) > 1:
                 out = self.module_list[node].\
-                    forward(*[memory[in_vertex]\
-                        for in_vertex in self.in_edges[node]])
+                    forward(*[memory[in_vertex]
+                              for in_vertex in self.in_edges[node]])
             else:
                 out = self.module_list[node].\
                     forward(memory[self.in_edges[node][0]])
@@ -53,6 +54,3 @@ class Rand_Wire(nn.Module):
             out += memory[self.in_edges[self.node_num + 1][in_vertex_index]]
         out = out / len(self.in_edges[self.node_num + 1])
         return out
-
-
-    

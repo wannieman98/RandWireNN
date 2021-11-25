@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 
+
 class Node(nn.Module):
 
     def __init__(self, in_channel, out_channel, degree=1, stride=1):
@@ -30,11 +31,12 @@ class Node(nn.Module):
         # aggregate weight = [degree, 1]
         if self.degree >= 1 and len(x.shape) > 4:
             x = torch.matmul(x, torch.sigmoid(self.aggregate_weight))
-            
+
         # x = [B, channel, W, H]
         x = self.conv(x)
 
         return x
+
 
 class SeperableConvolution(nn.Module):
 
@@ -47,8 +49,9 @@ class SeperableConvolution(nn.Module):
         as convolution for each channels and then taking a channel-wise pooling.
         """
         self.conv = nn.Sequential(
-            nn.Conv2d(in_channel, in_channel, 3, groups=in_channel, padding=1, stride=stride),
-            nn.Conv2d(in_channel, out_channel, 1) 
+            nn.Conv2d(in_channel, in_channel, 3,
+                      groups=in_channel, padding=1, stride=stride),
+            nn.Conv2d(in_channel, out_channel, 1)
         )
 
     def forward(self, x):
