@@ -36,9 +36,9 @@ The objective of this project is for me to gain better understanding of the NAS 
   - [x] Erdo ̋s-Re ́nyi (ER)
   - [x] Baraba ́si-Albert (BA)
   - [x] Watts-Strogatz (WS)
-- [ ] Network Generator (On-Going)
+- [x] Network Generator (On-Going)
 - [x] Dataset pipelines
-- [x] Training Functions
+- [ ] Training Functions
 - [ ] Testing Functions
 - [ ] Script to train the model
 
