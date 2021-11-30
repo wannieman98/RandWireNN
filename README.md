@@ -19,7 +19,6 @@ In the paper [Randomly Wired Neural Network](https://arxiv.org/abs/1904.01569), 
 
 ##### Datasets (ordered by magnitude)
 
-- [PatchCamelyon](https://patchcamelyon.grand-challenge.org)
 - [VOC 2012](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/)
 - [ImageNET](https://www.image-net.org)
 
@@ -53,4 +52,5 @@ The objective of this project is for me to gain better understanding of the NAS 
   heapq 
   torchvision 
   tensorflow_datasets
+  sklearn
   ```
