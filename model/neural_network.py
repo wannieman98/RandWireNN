@@ -21,21 +21,27 @@ class RandomlyWiredNeuralNetwork(nn.Module):
         self.node_num = node_num
 
         self.conv1 = nn.Sequential(
-            nn.Conv2d(in_channels=input_channel, out_channels=channel//2, kernel_size=3, stride=2, padding=1),
+            nn.Conv2d(in_channels=input_channel, out_channels=channel //
+                      2, kernel_size=3, stride=2, padding=1),
             nn.BatchNorm2d(channel//2)
-            )
+        )
+
         if is_small_regime:
             self.conv2 = nn.Sequential(
                 nn.ReLU(),
-                nn.Conv2d(in_channels=channel//2, out_channels=channel, kernel_size=3, stride=2, padding=1),
+                nn.Conv2d(in_channels=channel//2, out_channels=channel,
+                          kernel_size=3, stride=2, padding=1),
                 nn.BatchNorm2d(channel)
             )
 
-            self.conv3 = Rand_Wire(node_num, p, k, m, graph_type, channel, channel, is_train, "small_regime_1")
+            self.conv3 = Rand_Wire(
+                node_num, p, k, m, graph_type, channel, channel, is_train, "small_regime_1")
 
-            self.conv4 = Rand_Wire(node_num, p, k, m, graph_type, channel, 2*channel, is_train, "small_regime_2")
-            
-            self.conv5 = Rand_Wire(node_num, p, k, m, graph_type, 2*channel, 4*channel, is_train, "small_regime_3")
+            self.conv4 = Rand_Wire(
+                node_num, p, k, m, graph_type, channel, 2*channel, is_train, "small_regime_2")
+
+            self.conv5 = Rand_Wire(
+                node_num, p, k, m, graph_type, 2*channel, 4*channel, is_train, "small_regime_3")
 
             self.conv6 = nn.Sequential(
                 nn.ReLU(),
@@ -44,33 +50,42 @@ class RandomlyWiredNeuralNetwork(nn.Module):
                 nn.AdaptiveAvgPool2d(1)
             )
         else:
-            self.conv2 = Rand_Wire(node_num, p, k, m, graph_type, channel//2, channel, is_train, "regular_regime_1")
+            self.conv2 = Rand_Wire(
+                node_num, p, k, m, graph_type, channel//2, channel, is_train, "regular_regime_1")
 
-            self.conv3 = Rand_Wire(node_num, p, k, m, graph_type, channel, 2*channel, is_train, "regular_regime_2")
+            self.conv3 = Rand_Wire(
+                node_num, p, k, m, graph_type, channel, 2*channel, is_train, "regular_regime_2")
 
-            self.conv4 = Rand_Wire(node_num, p, k, m, graph_type, 2*channel, 4*channel, is_train, "regular_regime_3")
+            self.conv4 = Rand_Wire(
+                node_num, p, k, m, graph_type, 2*channel, 4*channel, is_train, "regular_regime_3")
 
-            self.conv5 = Rand_Wire(node_num, p, k, m, graph_type, 4*channel, 8*channel, is_train, "regular_regime_4")
+            self.conv5 = Rand_Wire(
+                node_num, p, k, m, graph_type, 4*channel, 8*channel, is_train, "regular_regime_4")
 
             self.conv6 = nn.Sequential(
                 nn.ReLU(),
                 nn.Conv2d(8*channel, 1280, 1),
-                nn.BatchNorm2d(1280)
+                nn.BatchNorm2d(1280),
+                nn.AdaptiveAvgPool2d(1)
             )
 
         self.classifier = nn.Sequential(
-            # nn.AdaptiveAvgPool2d((1,1)),
-            nn.Linear(1280, classes),
-            nn.LogSoftmax(1)
+            nn.Linear(1280, classes)
+            # nn.LogSoftmax(1)
         )
 
-    def forward(self, x):                             
-       x = self.conv1(x)                              
-       x = self.conv2(x)                              
-       x = self.conv3(x)                              
-       x = self.conv4(x)                              
-       x = self.conv5(x)                              
-       x = self.conv6(x).squeeze(-1).squeeze(-1)      
-       x = self.classifier(x)                         
+        for parameter in self.parameters():
+            if parameter.dim() >= 2:
+                nn.init.xavier_uniform_(parameter)
 
-       return x
+    def forward(self, x):
+        x = self.conv1(x)
+        x = self.conv2(x)
+        x = self.conv3(x)
+        x = self.conv4(x)
+        x = self.conv5(x)
+        x = self.conv6(x).squeeze(-1).squeeze(-1)
+       #  x = self.conv6(x).view(x.size(0), -1)
+        x = self.classifier(x)
+
+        return x

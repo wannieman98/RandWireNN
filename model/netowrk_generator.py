@@ -70,14 +70,20 @@ class Rand_Wire(nn.Module):
 
         for node, inputs in self.in_nodes.items():
             node = str(node)
-            if len(inputs) == 1 and inputs[0] == 0:
+            if inputs[0] == 0:
                 tempNodeOps[node] = Node(
-                    self.params['in_channels'], self.params['out_channels'], len(inputs), 2)
+                    self.params['in_channels'],
+                    self.params['out_channels'],
+                    len(inputs), 2
+                )
             elif node == str(self.output_node):
                 pass
             else:
                 tempNodeOps[node] = Node(
-                    self.params['out_channels'], self.params['out_channels'], len(inputs))
+                    self.params['out_channels'],
+                    self.params['out_channels'],
+                    len(inputs)
+                )
 
         return nn.ModuleDict(tempNodeOps)
 
@@ -104,10 +110,12 @@ class Rand_Wire(nn.Module):
             heapSet.remove(node)
 
             if node != self.input_node:
-                in_nodes = torch.stack([processed[node]
-                                       for node in self.in_nodes[node]], -1)
+                in_nodes = torch.stack([processed[input_node]
+                                       for input_node in self.in_nodes[node]], -1)
                 processed[node] = self.nodeOps[str(node)](in_nodes)
+
             neighbors = self.graph[node]
+
             for neighbor in neighbors:
                 if neighbor not in heapSet and neighbor != self.output_node:
                     heappush(heap, neighbor)

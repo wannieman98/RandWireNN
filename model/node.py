@@ -18,19 +18,19 @@ class Node(nn.Module):
               stride(int): The stride of the seperable conv layer.
         """
         super(Node, self).__init__()
-        self.aggregate_weight = torch.randn(degree, requires_grad=True)
+        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        self.aggregate_weight = nn.Parameter(
+            torch.zeros(degree), requires_grad=True).to(device)
         self.conv = nn.Sequential(
             nn.ReLU(),
             SeperableConvolution(in_channel, out_channel, stride),
             nn.BatchNorm2d(out_channel)
         )
-        self.degree = degree
 
     def forward(self, x):
         # x = [B, channel, W, H, degree]
         # aggregate weight = [degree, 1]
-        if self.degree >= 1 and len(x.shape) > 4:
-            x = torch.matmul(x, torch.sigmoid(self.aggregate_weight))
+        x = torch.matmul(x, torch.sigmoid(self.aggregate_weight))
 
         # x = [B, channel, W, H]
         x = self.conv(x)
@@ -49,8 +49,7 @@ class SeperableConvolution(nn.Module):
         as convolution for each channels and then taking a channel-wise pooling.
         """
         self.conv = nn.Sequential(
-            nn.Conv2d(in_channel, in_channel, 3,
-                      groups=in_channel, padding=1, stride=stride),
+            nn.Conv2d(in_channel, in_channel, 3, padding=1, stride=stride),
             nn.Conv2d(in_channel, out_channel, 1)
         )
 
