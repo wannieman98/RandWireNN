@@ -22,27 +22,25 @@ class Graph(nn.Module):
         self.m = m
         self.graph_mode = graph_mode
 
-    def get_dag(self) -> dict:
+    def get_dag(self):
         """Returns a dict representing the post-processed random graph."""
         networkx_random_graph = self.make_graph()
         return self.make_DAG(networkx_random_graph)
 
-    def make_graph(self) -> object:
+    def make_graph(self):
         """Creates a networkx object based on the given graph mode."""
-        if self.graph_mode == "ER":
-            graph = nx.random_graphs.erdos_renyi_graph(
+        if self.graph_mode == 'ER':
+            return nx.random_graphs.erdos_renyi_graph(
                 self.node_num, self.p, seed=SEED)
-        elif self.graph_mode == "WS":
+        elif self.graph_mode == 'WS':
             assert self.k % 2 == 0, "k must an even number."
-            graph = nx.random_graphs.connected_watts_strogatz_graph(
+            return nx.random_graphs.connected_watts_strogatz_graph(
                 self.node_num, self.k, self.p, seed=SEED)
-        elif self.graph_mode == "BA":
-            graph = nx.random_graphs.barabasi_albert_graph(
+        else:
+            return nx.random_graphs.barabasi_albert_graph(
                 self.node_num, self.m, seed=SEED)
 
-        return graph
-
-    def make_DAG(self, graph) -> dict:
+    def make_DAG(self, graph):
         """Given an undirected graph, constructs a directed acyclic graph
            and adds an extra node to all the initial nodes
            and adds an extra node to all the output nodes
@@ -50,10 +48,10 @@ class Graph(nn.Module):
            to the convolutional neural network computation.
 
            Args:
-              Networkx generated random graph class object 
+               Networkx generated random graph class object 
 
            Return:
-              Python dictionary with input nodes as keys and output nodes as values
+               Python dictionary with input nodes as keys and output nodes as values
         """
         sets = set()
         out_graph = {}
@@ -74,11 +72,11 @@ def has_edges(edge, sets) -> bool:
     """Check whether the edge exists in the graph to avoid cycle.
 
        Args:
-          edge(tuple): Represents an edge (input node, output node)
-          sets(set): Stores inserted edges
+           edge(tuple): Represents an edge (input node, output node)
+           sets(set): Stores inserted edges
 
        Return:
-          Whether edge has already been inserted to the grpah
+           Whether edge has already been inserted to the grpah
     """
     return edge in sets
 
@@ -88,11 +86,11 @@ def insert_edge(edge, graph) -> None:
        with input node as key and output node as values
 
        Args:
-          edge(tuple): Represents an edge (input node, output node)
-          graph(dict): Represents the graph {input node: [output nodes]}
+           edge(tuple): Represents an edge (input node, output node)
+           graph(dict): Represents the graph {input node: [output nodes]}
 
        Return:
-          None
+           None
     """
     input_node, output_node = edge
 
