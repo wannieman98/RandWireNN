@@ -7,4 +7,4 @@ def epoch_time(time, curr_epoch, total_epochs):
     time_left_min = int(time_left / 60) - minutes
     time_left_sec = int(time_left % 60)
 
-    return minutes, seconds, time_left_min, time_left_sec    
+    return minutes, seconds, time_left_min, time_left_sec
