@@ -88,10 +88,16 @@ class Rand_Wire(nn.Module):
         return nn.ModuleDict(tempNodeOps)
 
     def save_graph(self, graph):
-        pass
+        path = self.params["name"] + ".pkl"
+        with open(path, "wb") as f:
+            pickle.dump(graph, f)
 
     def load_graph(self):
-        pass
+        path = self.params["name"] + ".pkl"
+        with open(path, "r") as f:
+            out_graph = pickle.load(f)
+
+        return out_graph
 
     def forward(self, x):
         """Forward propagate through the random graph given input tensor x.
