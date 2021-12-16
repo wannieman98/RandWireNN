@@ -71,7 +71,7 @@ class Trainer:
                 self.params['is_small_regime']
             ).to(self.device)
 
-        self.best_loss = 0
+        self.best_loss = float('inf')
 
         if load:
             checkpoint = torch.load(self.param['checkpoint_path'])
