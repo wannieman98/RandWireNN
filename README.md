@@ -7,8 +7,9 @@ This is an Unofficial implementation of: [Randomly Wired Neural Network](https:/
 
 ### Progress
 
-* Currently training on VOC dataset with ~50% mean Accuracy Precision score.
-  * Trained on lr = 0.05, epoch = 50, small regime, C = 78, graph type = WS, k = 4, p = 0.75
+Model | Dataset | mAP | lr | epochs | lr Scheduler |
+--- | --- | --- | --- |--- |--- |--- |--- |--- |--- |--- |---
+RandWire(WS, 4, 0.75), C=78 small regime | VOC 2012 | 0.5 | 1e-3 | 50 | stepLR |
 
 ### Project Overview
 
