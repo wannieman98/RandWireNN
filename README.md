@@ -9,6 +9,11 @@ This is an Unofficial implementation of: [Randomly Wired Neural Network](https:/
 
 In this project, I am going to implement one of the image classification model generated using one of the state-of-the-art NAS method.
 
+## Progress
+
+* Currently training on VOC dataset with ~50% mean Accuracy Precision score.
+  * Trained on lr = 0.05, epoch = 50, small regime, C = 78, graph type = WS, k = 4, p = 0.75
+
 ##### NAS (Computer Vision)
 
 NAS, Neural Architecture Search, is essentilly an algorithm that allows auomatic buildilng of a neural network model given parameters. Unlike hand-designed NN architectures such as [DenseNet](https://arxiv.org/pdf/1608.06993.pdf), [ResNet](https://arxiv.org/pdf/1512.03385.pdf), etc., an NAS lets the heuristics design how to information is processed and the model will learn the representations of image.
@@ -37,9 +42,11 @@ The objective of this project is for me to gain better understanding of the NAS 
   - [x] Watts-Strogatz (WS)
 - [x] Network Generator (On-Going)
 - [x] Dataset pipelines
-- [ ] Training Functions
-- [ ] Testing Functions
-- [ ] Script to train the model
+- [x] Training Functions
+- [x] Testing Functions
+- [x] Script to train the model
+- [x] Train on VOC 2012 dataset
+- [ ] Train on ImageNet dataset
 
 ### Requirements
 
@@ -53,4 +60,9 @@ The objective of this project is for me to gain better understanding of the NAS 
   torchvision 
   tensorflow_datasets
   sklearn
+  ```
+
+- You can install the required modules via commandline
+  ```
+  pip install -r requirements.txt
   ```

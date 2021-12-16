@@ -1,0 +1,8 @@
+torchvision
+sklearn
+torch
+heapq  
+numpy 
+tqdm
+time 
+PIL
