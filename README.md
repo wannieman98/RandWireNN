@@ -56,7 +56,7 @@ The objective of this project is for me to gain better understanding of the NAS 
   ```
 
 ### Author
-Seungwan Yoo / [@wannieman98](https://www.linkedin.com/in/wanyoo2/)
+Seungwan Yoo / [@Wan](https://www.linkedin.com/in/wanyoo2/)
 
 ### License
 Under Apache License 2.0
