@@ -16,7 +16,9 @@ def main(param):
                             graph_mode=param.graph_mode,
                             batch_size=param.batch_size,
                             in_channels=param.in_channels,
-                            is_small_regime=param.is_small_regime)
+                            is_small_regime=param.is_small_regime,
+                            checkpoint_path=param.checkpoint_path,
+                            load=param.load)
     model.train()
 
 
@@ -37,6 +39,7 @@ if __name__ == '__main__':
     parser.add_argument('--batch_size', type=int, default=64)
     parser.add_argument('--in_channels', type=int, default=3)
     parser.add_argument('--is_small_regime', type=bool, default=True)
-    parser.add_argument('--checkpoint_path', type=str, default="checkpoints")
+    parser.add_argument('--checkpoint_path', type=str, default="./data/checkpoints/")
+    parser.add_argument('--load', type=bool, default=False)
     args = parser.parse_args()
     main(args)

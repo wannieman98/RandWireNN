@@ -21,12 +21,13 @@ torch.backends.cudnn.deterministic = True
 
 class Trainer:
 
-    def __init__(self, num_epoch, lr, 
+    def __init__(self, num_epoch, lr,
                  batch_size, num_node,
                  p, k, m, channel,
                  in_channels, path,
                  graph_mode, dataset,
-                 is_train, is_small_regime):
+                 is_train, is_small_regime,
+                 checkpoint_path, load):
         super(Trainer, self).__init__()
 
         self.params = {'num_epoch': num_epoch,
@@ -43,7 +44,8 @@ class Trainer:
                        'is_train': is_train,
                        'path': path,
                        'dataset': dataset,
-                       'is_small_regime': is_small_regime
+                       'is_small_regime': is_small_regime,
+                       'checkpoint_path': checkpoint_path
                        }
 
         self.device = torch.device(
@@ -53,8 +55,6 @@ class Trainer:
             self.params['dataset'],
             self.params['path'],
             self.params['batch_size'])
-
-        #TODO: Loading the model, optimizer, and epoch
 
         if self.params['is_train']:
             self.rwnn = RandomlyWiredNeuralNetwork(
@@ -70,12 +70,20 @@ class Trainer:
                 self.params['is_small_regime']
             ).to(self.device)
 
-            #TODO: simulate the learning curve to that of the paper
+        if load:
+            checkpoint = torch.load(self.param['checkpoint_path'])
+            self.rwnn.load_state_dict(checkpoint['model_state_dict'])
+            self.optimizer = checkpoint.load_state_dict(
+                checkpoint['optimizer_state_dict'])
+            self.epoch = checkpoint['epoch']
+        else:
+            # TODO: simulate the learning curve to that of the paper
             self.optimizer = optim.Adam(self.rwnn.parameters(), lr)
-            self.scheduler = optim.lr_scheduler.StepLR(
-                self.optimizer, step_size=30, gamma=0.5)
+            self.epoch = 0
 
-            self.criterion = nn.CrossEntropyLoss()
+        self.scheduler = optim.lr_scheduler.StepLR(
+            self.optimizer, step_size=30, gamma=0.5)
+        self.criterion = nn.CrossEntropyLoss()
 
         pytorch_total_params = sum(p.numel() for p in self.rwnn.parameters())
         print(f"Number of parameters {pytorch_total_params}")
@@ -83,13 +91,14 @@ class Trainer:
     def train(self):
         print("\nbegin training...")
 
-        for epoch in range(self.params['num_epoch']):
+        for epoch in range(self.epoch, self.params['num_epoch']):
             print("\nEpoch: {} out of {}".format(
                 epoch+1, self.params['num_epoch']))
             start_time = time.perf_counter()
 
             epoch_loss = train_loop(
                 self.train_data, self.rwnn, self.optimizer, self.criterion, self.device)
+
             val_loss = val_loop(self.val_data, self.rwnn,
                                 self.criterion, self.device)
 
@@ -105,10 +114,18 @@ class Trainer:
 
             if (epoch + 1) % 5 == 0:
                 if self.params['dataset'] == "voc":
-                    test_voc(self.test_data, self.rwnn, self.criterion, self.device)
+                    test_voc(self.test_data, self.rwnn,
+                             self.criterion, self.device)
                 elif self.params['dataset'] == "imagenet":
                     test_imagenet(self.test_data, self.rwnn,
                                   self.criterion, self.device)
+
+                torch.save({
+                    'epoch': epoch,
+                    'model_state_dict': self.rwnn.state_dict(),
+                    'optimizer_state_dict': self.optimizer.state_dict(),
+                    'epoch': epoch
+                }, self.params['checkpoint_path'])
 
             print(
                 f"Epoch time: {minutes}m {seconds}s - Time left for training: {time_left_min}m {time_left_sec}s")
