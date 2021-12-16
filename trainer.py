@@ -126,6 +126,7 @@ class Trainer:
                     'optimizer_state_dict': self.optimizer.state_dict(),
                     'epoch': epoch
                 }, self.params['checkpoint_path'])
+            print(f"\nTraining references saved at epoch {epoch}\n")
 
             print(
                 f"Epoch time: {minutes}m {seconds}s - Time left for training: {time_left_min}m {time_left_sec}s")
