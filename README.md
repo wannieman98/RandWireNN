@@ -34,6 +34,13 @@ As the datasets are ordered by magnitude, they will be trained sequentially and 
 
 The objective of this project is for me to gain better understanding of the NAS in general and in the state-of-the-art techniques of NAS. As the project progresss, I plan to adapt the Randomly Wired Neural Network model to object detection as well.
 
+### Usage
+
+The model can be trained via script call:
+```
+python train.py [-h] [--p P] [--k K] [--m M] [--lr LR] [--path PATH] [--dataset DATASET] [--channel CHANNEL] [--is_train IS_TRAIN] [--num_node NUM_NODE] [--num_epoch NUM_EPOCH] [--graph_mode GRAPH_MODE] [--batch_size BATCH_SIZE] [--in_channels IN_CHANNELS] [--is_small_regime IS_SMALL_REGIME] [--checkpoint_path CHECKPOINT_PATH] [--load LOAD]
+```
+
 ### Tasks
 
 - [x] Base NN architecture from which the Network Generator will build the model
@@ -51,7 +58,7 @@ The objective of this project is for me to gain better understanding of the NAS 
 
 ### Requirements
 
-- You can install the required modules via commandline
+- You can install the required modules via commandline:
   ```
   pip install -r requirements.txt
   ```
