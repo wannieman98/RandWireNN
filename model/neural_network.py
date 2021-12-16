@@ -1,4 +1,4 @@
-from netowrk_generator import Rand_Wire
+from model.network_generator import Rand_Wire
 import torch.nn as nn
 
 
@@ -70,8 +70,8 @@ class RandomlyWiredNeuralNetwork(nn.Module):
             )
 
         self.classifier = nn.Sequential(
-            nn.Linear(1280, classes)
-            # nn.LogSoftmax(1)
+            nn.Linear(1280, classes),
+            nn.LogSoftmax(1)
         )
 
         for parameter in self.parameters():
@@ -85,7 +85,6 @@ class RandomlyWiredNeuralNetwork(nn.Module):
         x = self.conv4(x)
         x = self.conv5(x)
         x = self.conv6(x).squeeze(-1).squeeze(-1)
-       #  x = self.conv6(x).view(x.size(0), -1)
         x = self.classifier(x)
 
         return x

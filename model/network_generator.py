@@ -1,8 +1,8 @@
 import torch
 import pickle
-from node import Node
 import torch.nn as nn
-from graph import Graph
+from model.node import Node
+from model.graph import Graph
 from heapq import heappush, heappop
 
 
@@ -46,7 +46,7 @@ class Rand_Wire(nn.Module):
                              self.params['graph_mode']
                              )
             graph = nx_graph.get_dag()
-            self.save_graph(graph)
+            # self.save_graph(graph)
         else:
             graph = self.load_graph()
 

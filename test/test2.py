@@ -1,6 +1,6 @@
 import unittest
 import torch
-from node import *
+from model.node import *
 
 class TestMethods(unittest.TestCase):
     # test seperable convolution
