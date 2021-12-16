@@ -5,14 +5,14 @@
 This is an Unofficial implementation of: [Randomly Wired Neural Network](https://arxiv.org/abs/1904.01569)(In Progress).
 ![](misc./network.png)
 
-### Project Overview
-
-In this project, I am going to implement one of the image classification model generated using one of the state-of-the-art NAS method.
-
-## Progress
+### Progress
 
 * Currently training on VOC dataset with ~50% mean Accuracy Precision score.
   * Trained on lr = 0.05, epoch = 50, small regime, C = 78, graph type = WS, k = 4, p = 0.75
+
+### Project Overview
+
+In this project, I am going to implement one of the image classification model generated using one of the state-of-the-art NAS method.
 
 ##### NAS (Computer Vision)
 
