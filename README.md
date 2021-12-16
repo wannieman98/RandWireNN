@@ -50,18 +50,6 @@ The objective of this project is for me to gain better understanding of the NAS 
 
 ### Requirements
 
-- Such libraries are necessary to run the program.
-  ```
-  torch >= 1.9.0
-  torchvision >= 0.10.1
-  networkx >= 2.6.3
-  time
-  heapq 
-  torchvision 
-  tensorflow_datasets
-  sklearn
-  ```
-
 - You can install the required modules via commandline
   ```
   pip install -r requirements.txt
