@@ -28,7 +28,7 @@ if __name__ == '__main__':
     parser.add_argument('--p', type=float, default=0.75)
     parser.add_argument('--k', type=float, default=4)
     parser.add_argument('--m', type=float, default=5)
-    parser.add_argument('--lr', type=float, default=1e-3)
+    parser.add_argument('--lr', type=float, default=0.005)
     parser.add_argument('--path', type=str, default='/content/')
     parser.add_argument('--dataset', type=str, default='voc')
     parser.add_argument('--channel', type=int, default=78)
