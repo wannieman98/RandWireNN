@@ -36,7 +36,7 @@ if __name__ == '__main__':
     parser.add_argument('--num_node', type=int, default=32)
     parser.add_argument('--num_epoch', type=int, default=10)
     parser.add_argument('--graph_mode', type=str, default='WS')
-    parser.add_argument('--batch_size', type=int, default=64)
+    parser.add_argument('--batch_size', type=int, default=128)
     parser.add_argument('--in_channels', type=int, default=3)
     parser.add_argument('--is_small_regime', type=bool, default=True)
     parser.add_argument('--checkpoint_path', type=str, default="./data/checkpoints/")

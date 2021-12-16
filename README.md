@@ -54,3 +54,9 @@ The objective of this project is for me to gain better understanding of the NAS 
   ```
   pip install -r requirements.txt
   ```
+
+### Author
+Seungwan Yoo/@wannieman98
+
+### License
+Under Apache License 2.0
