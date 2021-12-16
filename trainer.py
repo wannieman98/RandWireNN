@@ -1,4 +1,5 @@
 
+import os
 import time
 import torch
 import random
@@ -70,12 +71,15 @@ class Trainer:
                 self.params['is_small_regime']
             ).to(self.device)
 
+        self.best_loss = 0
+
         if load:
             checkpoint = torch.load(self.param['checkpoint_path'])
             self.rwnn.load_state_dict(checkpoint['model_state_dict'])
             self.optimizer = checkpoint.load_state_dict(
                 checkpoint['optimizer_state_dict'])
             self.epoch = checkpoint['epoch']
+            self.best_loss = checkpoint['best_loss']
         else:
             # TODO: simulate the learning curve to that of the paper
             self.optimizer = optim.Adam(self.rwnn.parameters(), lr)
@@ -102,6 +106,15 @@ class Trainer:
             val_loss = val_loop(self.val_data, self.rwnn,
                                 self.criterion, self.device)
 
+            if val_loss < self.best_loss:
+                self.best_loss = val_loss
+                torch.save({
+                    'epoch': epoch,
+                    'model_state_dict': self.rwnn.state_dict(),
+                    'optimizer_state_dict': self.optimizer.state_dict(),
+                    'best_loss': self.best_loss
+                }, os.path.join(self.params['checkpoint_path'], 'best.tar'))
+
             self.scheduler.step()
 
             end_time = time.perf_counter()
@@ -124,9 +137,8 @@ class Trainer:
                     'epoch': epoch,
                     'model_state_dict': self.rwnn.state_dict(),
                     'optimizer_state_dict': self.optimizer.state_dict(),
-                    'epoch': epoch
-                }, self.params['checkpoint_path'])
-                print(f"\nTraining references saved at epoch {epoch}\n")
+                    'best_loss': self.best_loss
+                }, os.path.join(self.params['checkpoint_path'], 'train.tar'))
 
             print(
                 f"Epoch time: {minutes}m {seconds}s - Time left for training: {time_left_min}m {time_left_sec}s")
