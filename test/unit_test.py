@@ -1,8 +1,8 @@
 import unittest
 import torch
-from graph import Graph
-from netowrk_generator import Rand_Wire
-from node import *
+from model.graph import Graph
+from model.network_generator import Rand_Wire
+from model.node import *
 
 
 class TestMethods(unittest.TestCase):

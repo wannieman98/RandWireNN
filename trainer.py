@@ -27,7 +27,7 @@ class Trainer:
                  p, k, m, channel,
                  in_channels, path,
                  graph_mode, dataset,
-                 is_train, is_small_regime,
+                 is_small_regime,
                  checkpoint_path, load):
         super(Trainer, self).__init__()
 
@@ -42,7 +42,7 @@ class Trainer:
                        'channel': channel,
                        'classes': 21 if dataset == 'voc' else 1000,
                        'graph_mode': graph_mode,
-                       'is_train': is_train,
+                       'load': load,
                        'path': path,
                        'dataset': dataset,
                        'is_small_regime': is_small_regime,
@@ -57,19 +57,19 @@ class Trainer:
             self.params['path'],
             self.params['batch_size'])
 
-        if self.params['is_train']:
-            self.rwnn = RandomlyWiredNeuralNetwork(
-                self.params['channel'],
-                self.params['in_channels'],
-                self.params['p'],
-                self.params['k'],
-                self.params['m'],
-                self.params['graph_mode'],
-                self.params['classes'],
-                self.params['node_num'],
-                self.params['is_train'],
-                self.params['is_small_regime']
-            ).to(self.device)
+        self.rwnn = RandomlyWiredNeuralNetwork(
+            self.params['channel'],
+            self.params['in_channels'],
+            self.params['p'],
+            self.params['k'],
+            self.params['m'],
+            self.params['graph_mode'],
+            self.params['classes'],
+            self.params['node_num'],
+            self.params['checkpoint_path'],
+            self.params['load'],
+            self.params['is_small_regime']
+        ).to(self.device)
 
         self.best_loss = float('inf')
 
@@ -80,13 +80,14 @@ class Trainer:
                 checkpoint['optimizer_state_dict'])
             self.epoch = checkpoint['epoch']
             self.best_loss = checkpoint['best_loss']
+            self.scheduler = checkpoint['lr_scheduler']
         else:
             # TODO: simulate the learning curve to that of the paper
             self.optimizer = optim.Adam(self.rwnn.parameters(), lr)
             self.epoch = 0
+            self.scheduler = optim.lr_scheduler.StepLR(
+                self.optimizer, step_size=20, gamma=0.85)
 
-        self.scheduler = optim.lr_scheduler.StepLR(
-            self.optimizer, step_size=30, gamma=0.5)
         self.criterion = nn.CrossEntropyLoss()
 
         pytorch_total_params = sum(p.numel() for p in self.rwnn.parameters())
@@ -108,12 +109,9 @@ class Trainer:
 
             if val_loss < self.best_loss:
                 self.best_loss = val_loss
-                torch.save({
-                    'epoch': epoch,
-                    'model_state_dict': self.rwnn.state_dict(),
-                    'optimizer_state_dict': self.optimizer.state_dict(),
-                    'best_loss': self.best_loss
-                }, os.path.join(self.params['checkpoint_path'], 'best.tar'))
+                torch.save(
+                    self.rwnn,
+                    os.path.join(self.params['checkpoint_path'], 'best.tar'))
 
             self.scheduler.step()
 
@@ -137,7 +135,8 @@ class Trainer:
                     'epoch': epoch,
                     'model_state_dict': self.rwnn.state_dict(),
                     'optimizer_state_dict': self.optimizer.state_dict(),
-                    'best_loss': self.best_loss
+                    'best_loss': self.best_loss,
+                    'lr_scheduler': self.lr_scheduler
                 }, os.path.join(self.params['checkpoint_path'], 'train.tar'))
 
             print(

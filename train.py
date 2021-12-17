@@ -24,7 +24,7 @@ def main(param):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(
-        description='Randomly Wired Neural Network')
+        description='Train Randomly Wired Neural Network')
     parser.add_argument('--p', type=float, default=0.75)
     parser.add_argument('--k', type=float, default=4)
     parser.add_argument('--m', type=float, default=5)

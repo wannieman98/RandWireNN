@@ -1,3 +1,4 @@
+import os
 import torch
 import pickle
 import torch.nn as nn
@@ -8,7 +9,7 @@ from heapq import heappush, heappop
 
 class Rand_Wire(nn.Module):
 
-    def __init__(self, node_num, p, k, m, graph_mode, in_channels, out_channels, is_train, name):
+    def __init__(self, node_num, p, k, m, graph_mode, in_channels, out_channels, path, load, name):
         """Generator mapping the random graph onto the CNN architecture.
 
            Args:
@@ -28,7 +29,8 @@ class Rand_Wire(nn.Module):
             'graph_mode': graph_mode,
             'in_channels': in_channels,
             'out_channels': out_channels,
-            'is_train': is_train,
+            'path': path,
+            'load': load,
             'name': name
         }
         self.input_node = 0
@@ -38,7 +40,7 @@ class Rand_Wire(nn.Module):
         self.nodeOps = self.get_nodeOps()
 
     def get_graph(self):
-        if self.params['is_train']:
+        if not self.params['load']:
             nx_graph = Graph(self.params['node_num'],
                              self.params['p'],
                              self.params['k'],
@@ -46,7 +48,7 @@ class Rand_Wire(nn.Module):
                              self.params['graph_mode']
                              )
             graph = nx_graph.get_dag()
-            # self.save_graph(graph)
+            self.save_graph(graph)
         else:
             graph = self.load_graph()
 
@@ -88,12 +90,12 @@ class Rand_Wire(nn.Module):
         return nn.ModuleDict(tempNodeOps)
 
     def save_graph(self, graph):
-        path = self.params["name"] + ".pkl"
+        path = os.path.join(self.params['path'], self.params["name"] + ".pkl")
         with open(path, "wb") as f:
             pickle.dump(graph, f)
 
     def load_graph(self):
-        path = self.params["name"] + ".pkl"
+        path = os.path.join(self.params['path'], self.params["name"] + ".pkl")
         with open(path, "r") as f:
             out_graph = pickle.load(f)
 
