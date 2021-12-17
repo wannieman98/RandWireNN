@@ -71,22 +71,23 @@ class Trainer:
             self.params['is_small_regime']
         ).to(self.device)
 
+        self.optimizer = optim.Adam(self.rwnn.parameters(), lr)
+
         self.best_loss = float('inf')
 
         if load:
-            checkpoint = torch.load(self.param['checkpoint_path'])
+            checkpoint = torch.load(os.path.join(self.params['checkpoint_path'], 'train.tar'))
             self.rwnn.load_state_dict(checkpoint['model_state_dict'])
-            self.optimizer = checkpoint.load_state_dict(
+            self.optimizer.load_state_dict(
                 checkpoint['optimizer_state_dict'])
             self.epoch = checkpoint['epoch']
             self.best_loss = checkpoint['best_loss']
-            self.scheduler = checkpoint['lr_scheduler']
+            # self.scheduler = checkpoint['scheduler']
         else:
             # TODO: simulate the learning curve to that of the paper
-            self.optimizer = optim.Adam(self.rwnn.parameters(), lr)
             self.epoch = 0
-            self.scheduler = optim.lr_scheduler.StepLR(
-                self.optimizer, step_size=20, gamma=0.85)
+            # self.scheduler = optim.lr_scheduler.StepLR(
+            #     self.optimizer, step_size=20, gamma=0.85)
 
         self.criterion = nn.CrossEntropyLoss()
 
@@ -113,7 +114,7 @@ class Trainer:
                     self.rwnn,
                     os.path.join(self.params['checkpoint_path'], 'best.pt'))
 
-            self.scheduler.step()
+            # self.scheduler.step()
 
             end_time = time.perf_counter()
 
@@ -125,18 +126,16 @@ class Trainer:
 
             if (epoch + 1) % 5 == 0:
                 if self.params['dataset'] == "voc":
-                    test_voc(self.test_data, self.rwnn,
-                             self.criterion, self.device)
+                    test_voc(self.test_data, self.rwnn, self.device)
                 elif self.params['dataset'] == "imagenet":
-                    test_imagenet(self.test_data, self.rwnn,
-                                  self.criterion, self.device)
+                    test_imagenet(self.test_data, self.rwnn, self.device)
 
                 torch.save({
                     'epoch': epoch,
                     'model_state_dict': self.rwnn.state_dict(),
                     'optimizer_state_dict': self.optimizer.state_dict(),
                     'best_loss': self.best_loss,
-                    'lr_scheduler': self.lr_scheduler
+                    # 'scheduler': self.scheduler
                 }, os.path.join(self.params['checkpoint_path'], 'train.tar'))
 
             print(

@@ -20,3 +20,5 @@ if __name__ == '__main__':
     parser.add_argument('--dataset', type=str, default='voc')
     parser.add_argument('--model_path', type=str, required=True)
     parser.add_argument('--data_path', type=str, required=True)
+    args = parser.parse_args()
+    main(args)

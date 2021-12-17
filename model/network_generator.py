@@ -96,7 +96,7 @@ class Rand_Wire(nn.Module):
 
     def load_graph(self):
         path = os.path.join(self.params['path'], self.params["name"] + ".pkl")
-        with open(path, "r") as f:
+        with open(path, "rb") as f:
             out_graph = pickle.load(f)
 
         return out_graph

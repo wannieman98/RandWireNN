@@ -41,6 +41,11 @@ The model can be trained via script call:
 python train.py [-h] [--p P] [--k K] [--m M] [--lr LR] [--path PATH] [--dataset DATASET] [--channel CHANNEL] [--is_train IS_TRAIN] [--num_node NUM_NODE] [--num_epoch NUM_EPOCH] [--graph_mode GRAPH_MODE] [--batch_size BATCH_SIZE] [--in_channels IN_CHANNELS] [--is_small_regime IS_SMALL_REGIME] [--checkpoint_path CHECKPOINT_PATH] [--load LOAD]
 ```
 
+After the model has been trained you can test the best model via script call:
+```
+python test.py [-h] [--model_path MODEL_PATH] [--data_path DATA_PATH]
+```
+
 ### Tasks
 
 - [x] Base NN architecture from which the Network Generator will build the model
