@@ -10,7 +10,6 @@ def main(param):
                             path=param.path,
                             dataset=param.dataset,
                             channel=param.channel,
-                            is_train=param.is_train,
                             num_node=param.num_node,
                             num_epoch=param.num_epoch,
                             graph_mode=param.graph_mode,

@@ -35,13 +35,13 @@ class RandomlyWiredNeuralNetwork(nn.Module):
             )
 
             self.conv3 = Rand_Wire(
-                node_num, p, k, m, graph_type, channel, channel, load, path, "small_regime_1")
+                node_num, p, k, m, graph_type, channel, channel, path, load, "small_regime_1")
 
             self.conv4 = Rand_Wire(
-                node_num, p, k, m, graph_type, channel, 2*channel, load, path, "small_regime_2")
+                node_num, p, k, m, graph_type, channel, 2*channel, path, load, "small_regime_2")
 
             self.conv5 = Rand_Wire(
-                node_num, p, k, m, graph_type, 2*channel, 4*channel, load, path, "small_regime_3")
+                node_num, p, k, m, graph_type, 2*channel, 4*channel, path, load, "small_regime_3")
 
             self.conv6 = nn.Sequential(
                 nn.ReLU(),
@@ -51,16 +51,16 @@ class RandomlyWiredNeuralNetwork(nn.Module):
             )
         else:
             self.conv2 = Rand_Wire(
-                node_num, p, k, m, graph_type, channel//2, channel, load, path, "regular_regime_1")
+                node_num, p, k, m, graph_type, channel//2, channel, path, load, "regular_regime_1")
 
             self.conv3 = Rand_Wire(
-                node_num, p, k, m, graph_type, channel, 2*channel, load, path, "regular_regime_2")
+                node_num, p, k, m, graph_type, channel, 2*channel, path, load, "regular_regime_2")
 
             self.conv4 = Rand_Wire(
-                node_num, p, k, m, graph_type, 2*channel, 4*channel, load, path, "regular_regime_3")
+                node_num, p, k, m, graph_type, 2*channel, 4*channel, path, load, "regular_regime_3")
 
             self.conv5 = Rand_Wire(
-                node_num, p, k, m, graph_type, 4*channel, 8*channel, load, path, "regular_regime_4")
+                node_num, p, k, m, graph_type, 4*channel, 8*channel, path, load, "regular_regime_4")
 
             self.conv6 = nn.Sequential(
                 nn.ReLU(),

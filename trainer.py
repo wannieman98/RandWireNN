@@ -111,7 +111,7 @@ class Trainer:
                 self.best_loss = val_loss
                 torch.save(
                     self.rwnn,
-                    os.path.join(self.params['checkpoint_path'], 'best.tar'))
+                    os.path.join(self.params['checkpoint_path'], 'best.pt'))
 
             self.scheduler.step()
 
