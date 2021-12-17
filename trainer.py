@@ -110,6 +110,8 @@ class Trainer:
 
             if val_loss < self.best_loss:
                 self.best_loss = val_loss
+                with open(os.path.join(self.params['checkpoint_path'], 'best_model.txt'), 'w') as f:
+                    f.write(f"epoch: {epoch+1}, 'validation loss: {val_loss}")
                 torch.save(
                     self.rwnn,
                     os.path.join(self.params['checkpoint_path'], 'best.pt'))
