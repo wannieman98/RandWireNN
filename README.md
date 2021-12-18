@@ -7,9 +7,10 @@ This is an Unofficial implementation of: [Randomly Wired Neural Network](https:/
 
 ### Progress
 
-| Model | Dataset | mAP | lr | epochs | lr Scheduler |
-| --- | --- | --- | --- | --- | --- |
-| RandWire(WS, 4, 0.75), C=78 small regime | VOC 2012 | 0.5 | 1e-3 | 50 | stepLR |
+| Model | Dataset | mAP | lr | epochs | lr Scheduler | Date |
+| --- | --- | --- | --- | --- | --- | --- |
+| RandWire(WS, 4, 0.75), C=78 small regime | VOC 2012 | 0.47 | 1e-3 | 50 | stepLR | 12/16/21 |
+| RandWire(WS, 4, 0.75), C=78 small regime | VOC 2012 | 0.521 | 1e-3 | 100 | N/A | 12/18/21 |
 
 ### Project Overview
 
