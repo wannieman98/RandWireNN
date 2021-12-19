@@ -97,13 +97,14 @@ class Trainer:
     def train(self):
         print("\nbegin training...")
 
+        step_num = 0
+
         for epoch in range(self.epoch, self.params['num_epoch']):
-            print("\nEpoch: {} out of {}".format(
-                epoch+1, self.params['num_epoch']))
+            print(f"\nEpoch: {epoch+1} out of {self.params['num_epoch']}, step: {step_num}")
             start_time = time.perf_counter()
 
             epoch_loss = train_loop(
-                self.train_data, self.rwnn, self.optimizer, self.criterion, self.device)
+                self.train_data, self.rwnn, step_num, self.optimizer, self.criterion, self.device)
 
             val_loss = val_loop(self.val_data, self.rwnn,
                                 self.criterion, self.device)
@@ -111,7 +112,7 @@ class Trainer:
             if val_loss < self.best_loss:
                 self.best_loss = val_loss
                 with open(os.path.join(self.params['checkpoint_path'], 'best_model.txt'), 'w') as f:
-                    f.write(f"epoch: {epoch+1}, 'validation loss: {val_loss}")
+                    f.write(f"epoch: {epoch+1}, 'validation loss: {val_loss}, step: {step_num}")
                 torch.save(
                     self.rwnn,
                     os.path.join(self.params['checkpoint_path'], 'best.pt'))
@@ -144,7 +145,7 @@ class Trainer:
                 f"Epoch time: {minutes}m {seconds}s - Time left for training: {time_left_min}m {time_left_sec}s")
 
 
-def train_loop(train_iter, model, optimizer, criterion, device):
+def train_loop(train_iter, model, step_num, optimizer, criterion, device):
     epoch_loss = 0
     model.train()
 
@@ -161,6 +162,8 @@ def train_loop(train_iter, model, optimizer, criterion, device):
         loss.backward()
 
         optimizer.step()
+
+        step_num += 1
 
         epoch_loss += loss.item()
 
