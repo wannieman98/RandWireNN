@@ -109,8 +109,6 @@ class Trainer:
             epoch_loss, step = train_loop(
                 self.train_data, self.rwnn, self.optimizer, self.criterion, self.device)
 
-            step_num += step
-
             val_loss = val_loop(self.val_data, self.rwnn,
                                 self.criterion, self.device)
 
@@ -122,6 +120,8 @@ class Trainer:
                 torch.save(
                     self.rwnn,
                     os.path.join(self.params['checkpoint_path'], 'best.pt'))
+
+            step_num += step
 
             self.scheduler.step()
 
