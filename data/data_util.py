@@ -63,6 +63,8 @@ def fetch_dataloader(dataset, path, batch_size):
             batch_size=batch_size,
             num_workers=4,
             shuffle=False, pin_memory=True, drop_last=False)
+    else:
+        raise NameError("This dataset is not supported.")
 
     return train, val, test
 

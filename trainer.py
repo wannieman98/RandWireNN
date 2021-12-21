@@ -71,23 +71,25 @@ class Trainer:
             self.params['is_small_regime']
         ).to(self.device)
 
-        self.optimizer = optim.Adam(self.rwnn.parameters(), lr)
+        self.optimizer = optim.SGD(
+            self.rwnn.parameters(), self.params['lr'], 0.9, weight_decay=5e-5)
 
         self.best_loss = float('inf')
 
         if load:
-            checkpoint = torch.load(os.path.join(self.params['checkpoint_path'], 'train.tar'))
+            checkpoint = torch.load(os.path.join(
+                self.params['checkpoint_path'], 'train.tar'))
             self.rwnn.load_state_dict(checkpoint['model_state_dict'])
             self.optimizer.load_state_dict(
                 checkpoint['optimizer_state_dict'])
             self.epoch = checkpoint['epoch']
             self.best_loss = checkpoint['best_loss']
-            # self.scheduler = checkpoint['scheduler']
+            self.scheduler = checkpoint['scheduler']
+            self.step_num = checkpoint['step_num']
         else:
-            # TODO: simulate the learning curve to that of the paper
             self.epoch = 0
-            # self.scheduler = optim.lr_scheduler.StepLR(
-            #     self.optimizer, step_size=20, gamma=0.85)
+            self.scheduler = optim.lr_scheduler.CosineAnnealingLR(
+                self.optimizer, self.params['num_epoch'])
 
         self.criterion = nn.CrossEntropyLoss()
 
@@ -100,11 +102,14 @@ class Trainer:
         step_num = 0
 
         for epoch in range(self.epoch, self.params['num_epoch']):
-            print(f"\nEpoch: {epoch+1} out of {self.params['num_epoch']}, step: {step_num}")
+            print(
+                f"\nEpoch: {epoch+1} out of {self.params['num_epoch']}, step: {step_num}")
             start_time = time.perf_counter()
 
-            epoch_loss = train_loop(
-                self.train_data, self.rwnn, step_num, self.optimizer, self.criterion, self.device)
+            epoch_loss, step = train_loop(
+                self.train_data, self.rwnn, self.optimizer, self.criterion, self.device)
+
+            step_num += step
 
             val_loss = val_loop(self.val_data, self.rwnn,
                                 self.criterion, self.device)
@@ -112,12 +117,13 @@ class Trainer:
             if val_loss < self.best_loss:
                 self.best_loss = val_loss
                 with open(os.path.join(self.params['checkpoint_path'], 'best_model.txt'), 'w') as f:
-                    f.write(f"epoch: {epoch+1}, 'validation loss: {val_loss}, step: {step_num}")
+                    f.write(
+                        f"epoch: {epoch+1}, 'validation loss: {val_loss}, step: {step_num}")
                 torch.save(
                     self.rwnn,
                     os.path.join(self.params['checkpoint_path'], 'best.pt'))
 
-            # self.scheduler.step()
+            self.scheduler.step()
 
             end_time = time.perf_counter()
 
@@ -138,15 +144,17 @@ class Trainer:
                     'model_state_dict': self.rwnn.state_dict(),
                     'optimizer_state_dict': self.optimizer.state_dict(),
                     'best_loss': self.best_loss,
-                    # 'scheduler': self.scheduler
+                    'scheduler': self.scheduler,
+                    'step_num': step_num
                 }, os.path.join(self.params['checkpoint_path'], 'train.tar'))
 
             print(
                 f"Epoch time: {minutes}m {seconds}s - Time left for training: {time_left_min}m {time_left_sec}s")
 
 
-def train_loop(train_iter, model, step_num, optimizer, criterion, device):
+def train_loop(train_iter, model, optimizer, criterion, device):
     epoch_loss = 0
+    step_num = 0
     model.train()
 
     print("Training...")
@@ -167,7 +175,7 @@ def train_loop(train_iter, model, step_num, optimizer, criterion, device):
 
         epoch_loss += loss.item()
 
-    return epoch_loss / len(train_iter)
+    return epoch_loss / len(train_iter), step_num
 
 
 def val_loop(val_iter, model, criterion, device):

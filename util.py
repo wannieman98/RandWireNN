@@ -1,3 +1,6 @@
+import torch.nn as nn
+
+
 def epoch_time(time, curr_epoch, total_epochs):
     minutes = int(time / 60)
     seconds = int(time % 60)
@@ -8,3 +11,5 @@ def epoch_time(time, curr_epoch, total_epochs):
     time_left_sec = int(time_left % 60)
 
     return minutes, seconds, time_left_min, time_left_sec
+    
+
