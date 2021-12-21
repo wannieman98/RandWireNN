@@ -130,23 +130,17 @@ class Trainer:
             minutes, seconds, time_left_min, time_left_sec = epoch_time(
                 end_time-start_time, epoch, self.params['num_epoch'])
 
+            torch.save({
+                'epoch': epoch,
+                'model_state_dict': self.rwnn.state_dict(),
+                'optimizer_state_dict': self.optimizer.state_dict(),
+                'best_loss': self.best_loss,
+                'scheduler': self.scheduler,
+                'step_num': step_num
+            }, os.path.join(self.params['checkpoint_path'], 'train.tar'))
+
             print(
                 f"Train_loss: {round(epoch_loss, 3)} - Val_loss: {round(val_loss, 3)}")
-
-            if (epoch + 1) % 5 == 0:
-                if self.params['dataset'] == "voc":
-                    test_voc(self.test_data, self.rwnn, self.device)
-                elif self.params['dataset'] == "imagenet":
-                    test_imagenet(self.test_data, self.rwnn, self.device)
-
-                torch.save({
-                    'epoch': epoch,
-                    'model_state_dict': self.rwnn.state_dict(),
-                    'optimizer_state_dict': self.optimizer.state_dict(),
-                    'best_loss': self.best_loss,
-                    'scheduler': self.scheduler,
-                    'step_num': step_num
-                }, os.path.join(self.params['checkpoint_path'], 'train.tar'))
 
             print(
                 f"Epoch time: {minutes}m {seconds}s - Time left for training: {time_left_min}m {time_left_sec}s")
