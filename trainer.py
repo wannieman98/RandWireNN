@@ -76,6 +76,8 @@ class Trainer:
 
         self.best_loss = float('inf')
 
+        self.step_num = 0
+
         if load:
             checkpoint = torch.load(os.path.join(
                 self.params['checkpoint_path'], 'train.tar'))
@@ -99,11 +101,9 @@ class Trainer:
     def train(self):
         print("\nbegin training...")
 
-        step_num = 0
-
         for epoch in range(self.epoch, self.params['num_epoch']):
             print(
-                f"\nEpoch: {epoch+1} out of {self.params['num_epoch']}, step: {step_num}")
+                f"\nEpoch: {epoch+1} out of {self.params['num_epoch']}, step: {self.step_num}")
             start_time = time.perf_counter()
 
             epoch_loss, step = train_loop(
@@ -116,12 +116,16 @@ class Trainer:
                 self.best_loss = val_loss
                 with open(os.path.join(self.params['checkpoint_path'], 'best_model.txt'), 'w') as f:
                     f.write(
-                        f"epoch: {epoch+1}, 'validation loss: {val_loss}, step: {step_num}")
+                        f"epoch: {epoch+1}, 'validation loss: {val_loss}, step: {self.step_num}")
                 torch.save(
                     self.rwnn,
                     os.path.join(self.params['checkpoint_path'], 'best.pt'))
 
-            step_num += step
+            if (epoch + 1) % 15 == 0:
+                if self.params['dataset'] == 'voc':
+                    test_voc(self.test_data, self.rwnn, self.device)
+
+            self.step_num += step
 
             self.scheduler.step()
 
@@ -136,7 +140,7 @@ class Trainer:
                 'optimizer_state_dict': self.optimizer.state_dict(),
                 'best_loss': self.best_loss,
                 'scheduler': self.scheduler,
-                'step_num': step_num
+                'step_num': self.step_num
             }, os.path.join(self.params['checkpoint_path'], 'train.tar'))
 
             print(

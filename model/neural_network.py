@@ -72,7 +72,6 @@ class RandomlyWiredNeuralNetwork(nn.Module):
         self.classifier = nn.Sequential(
             nn.Dropout(0.1),
             nn.Linear(1280, classes)
-            # nn.LogSoftmax(1)
         )
 
         for parameter in self.parameters():
